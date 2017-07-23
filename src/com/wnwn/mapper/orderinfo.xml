@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wnwn.mapper.OrderInfoMapper">
+
+	<!-- 连表查询
+		多对一
+		用<association>标签表示一 -->
+	<resultMap type="com.wnwn.po.OrderInfo" id="orderMap">
+		<id property="orderId" column="order_id"></id>	
+		<result property="orderName" column="order_name"></result>
+		<result property="orderPrice" column="order_price"></result>
+		<!-- 级联的外键所对应的实体对象 -->
+		<association property="userInfo" javaType="UserInfo" column="user_id">
+			<id property="userId" column="user_id"></id>
+			<result property="userName" column="user_name"></result>
+			<result property="userSex" column="user_sex"></result>
+		</association>
+	</resultMap>
+	
+	<!-- 将所查出来的user_info表的属性对应添加到实体类UserInfo中 -->
+	<select id="selectOrder" resultMap="orderMap">
+		select a.user_name,b.*
+		<!-- select b.* -->
+		from
+		user_info a,
+		order_info b
+		where a.user_id = b.user_id
+	</select>
+	
+</mapper>
